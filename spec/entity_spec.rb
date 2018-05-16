@@ -47,6 +47,12 @@ RSpec.describe Entitize::Entity do
     expect(jokers.last.funny?).to be true
   end
 
+  it "can handle single objects that need to be created" do
+    data = [{ name: "DJ Kalid" }, { name: "Jimbob", pup: { name: 'Freddy' }}]
+    jokers = entitize(data, "Joker")
+    expect(jokers.last.pup.name).to eq('Freddy')
+  end
+
   it "will use defined classes if found" do
     dog = { name: "Fred", breed: "Husky", groups: [{ name: "Yoga Klass" }]}
     dog = entitize(dog, "Dog")
