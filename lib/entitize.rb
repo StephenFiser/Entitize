@@ -1,7 +1,10 @@
+require 'pry'
+
 require 'active_support/inflector'
 
-require "entitize/entities"
 require "entitize/version"
+require "entitize/entities"
+require "entitize/repo"
 require "entitize/classifier"
 require "entitize/entity"
 

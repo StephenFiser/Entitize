@@ -28,7 +28,13 @@ module Entitize
 
       def get_class(class_name, data)
         if base_class.const_defined?(class_name)
-          base_class.const_get(class_name)
+
+          klass = base_class.const_get(class_name)
+          if klass.to_s.include?("Entities::")
+            klass
+          else
+            base_class.const_set(class_name, build(data))
+          end
         else
           base_class.const_set(class_name, build(data))
         end.new(data)
@@ -56,9 +62,6 @@ module Entitize
         end
       end
 
-      # TODO: shouldn't rely on String#capitalize here!
-      # TODO: what if *some* of the items in a collection are objects and some are not?
-      # TODO: replace [0..-2] with version of Rails singularize
       def get_class_name(base)
         base.to_s.camelize.singularize
       end
