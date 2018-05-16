@@ -31,6 +31,22 @@ RSpec.describe Entitize::Entity do
     expect(dog.friends.first).to be_a Friend
   end
 
+  it "creates nested classes with singular names even when all classes is defined" do
+    dog = { name: "Fred", breed: "Husky", jokers: [{ name: "DJ Kalid" }, { name: "Jimbob" }]}
+    dog = entitize(dog, "Pig")
+    expect(dog.jokers.first).to be_a Joker
+    expect(dog.jokers.first.funny?).to be true
+  end
+
+  it "can handle collections at the top level" do
+    data = [{ name: "DJ Kalid" }, { name: "Jimbob" }]
+    jokers = entitize(data, "Joker")
+    expect(jokers.first).to be_a Joker
+    expect(jokers.first.funny?).to be true
+    expect(jokers.last).to be_a Joker
+    expect(jokers.last.funny?).to be true
+  end
+
   it "will use defined classes if found" do
     dog = { name: "Fred", breed: "Husky", groups: [{ name: "Yoga Klass" }]}
     dog = entitize(dog, "Dog")
@@ -51,4 +67,12 @@ class Group
 end
 
 class Pig < Entitize::Entity
+end
+
+class Joker < Entitize::Entity
+
+  def funny?
+    true
+  end
+
 end
