@@ -3,17 +3,13 @@ module Entitize
     class << self
 
       def generate(data, class_name)
-        if data.is_a? Array
-          data.map { |d| Classifier.get_class(class_name, d).new(d) }
-        else
-          Classifier.get_class(class_name, data).new(data)
-        end
+        Entitize::Classifier.generate(data, class_name)
       end
 
-    end
+    end # --> END CLASS METHODS
 
     def initialize(data)
-      Classifier.define_methods(data, self)
+      Entitize::Classifier.define_methods(data, self)
     end
   end
 end
