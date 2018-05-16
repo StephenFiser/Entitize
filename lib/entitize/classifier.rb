@@ -27,10 +27,10 @@ module Entitize
       end
 
       def get_class(class_name, data)
-        if Object.const_defined?(class_name)
-          Object.const_get(class_name)
+        if base_class.const_defined?(class_name)
+          base_class.const_get(class_name)
         else
-          Object.const_set(class_name, build(data))
+          base_class.const_set(class_name, build(data))
         end.new(data)
       end
 
@@ -45,7 +45,7 @@ module Entitize
       end
 
       def create_one(class_name, object)
-        Entitize::Entity.generate(object, get_class_name(class_name))
+        generate(object, get_class_name(class_name))
       end
 
       def build(data)
@@ -60,7 +60,11 @@ module Entitize
       # TODO: what if *some* of the items in a collection are objects and some are not?
       # TODO: replace [0..-2] with version of Rails singularize
       def get_class_name(base)
-        base.to_s.capitalize[0..-2]
+        base.to_s.camelize.singularize
+      end
+
+      def base_class
+        Entitize.base_class
       end
     end # --> END CLASS METHODS
 
