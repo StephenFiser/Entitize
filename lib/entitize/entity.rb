@@ -2,19 +2,15 @@ module Entitize
   class Entity
     class << self
 
-      # Can data be an array?
+      # TODO: Can data be an array?
       def generate(data, class_name)
-        get_class(class_name, data).new(data)
+        Classifier.get_class(class_name, data).new(data)
       end
 
-      def get_class(class_name, data)
-        if Object.const_defined?(class_name)
-          Object.const_get(class_name)
-        else
-          Object.const_set(class_name, ClassBuilder.build(data))
-        end
-      end
+    end
 
+    def initialize(data)
+      Classifier.define_methods(data, self)
     end
   end
 end
