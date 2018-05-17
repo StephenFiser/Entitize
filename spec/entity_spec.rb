@@ -2,7 +2,7 @@ RSpec.describe Entitize::Entity do
   it "converts a hash into an object based on naming" do
     dog = { name: "Fred", breed: "Husky" }
     dog = entitize(dog, "Dog")
-    expect(dog).to be_a Entitize::Dog
+    expect(dog).to be_a Entitize.base_class::Dog
   end
 
   it "converts each attribute in the hash to a method" do
@@ -22,34 +22,34 @@ RSpec.describe Entitize::Entity do
   it "is smart about pluralization (thanks Rails)" do
     dog = { name: "Fred", breed: "Husky", people: [{ name: "DJ Kalid" }, { name: "Jimbob" }]}
     dog = entitize(dog, "Dog")
-    expect(dog.people.first).to be_a Entitize::Person
+    expect(dog.people.first).to be_a Entitize.base_class::Person
   end
 
   it "creates nested classes with singular names" do
     dog = { name: "Fred", breed: "Husky", friends: [{ name: "DJ Kalid" }, { name: "Jimbob" }]}
     dog = entitize(dog, "Dog")
-    expect(dog.friends.first).to be_a Entitize::Friend
+    expect(dog.friends.first).to be_a Entitize.base_class::Friend
   end
 
   it "creates nested classes with singular names even when top class is defined" do
     dog = { name: "Fred", breed: "Husky", friends: [{ name: "DJ Kalid" }, { name: "Jimbob" }]}
     dog = entitize(dog, "Pig")
-    expect(dog.friends.first).to be_a Entitize::Friend
+    expect(dog.friends.first).to be_a Entitize.base_class::Friend
   end
 
   it "creates nested classes with singular names even when all classes is defined" do
     dog = { name: "Fred", breed: "Husky", jokers: [{ name: "DJ Kalid" }, { name: "Jimbob" }]}
     dog = entitize(dog, "Pig")
-    expect(dog.jokers.first).to be_a Entitize::Joker
+    expect(dog.jokers.first).to be_a Entitize.base_class::Joker
     expect(dog.jokers.first.funny?).to be true
   end
 
   it "can handle collections at the top level" do
     data = [{ name: "DJ Kalid" }, { name: "Jimbob" }]
     jokers = entitize(data, "Joker")
-    expect(jokers.first).to be_a Entitize::Joker
+    expect(jokers.first).to be_a Entitize.base_class::Joker
     expect(jokers.first.funny?).to be true
-    expect(jokers.last).to be_a Entitize::Joker
+    expect(jokers.last).to be_a Entitize.base_class::Joker
     expect(jokers.last.funny?).to be true
   end
 
@@ -62,7 +62,7 @@ RSpec.describe Entitize::Entity do
   it "will use defined classes if found" do
     dog = { name: "Fred", breed: "Husky", groups: [{ name: "Yoga Klass" }]}
     dog = entitize(dog, "Dog")
-    expect(dog.groups.first).to be_a Entitize::Group
+    expect(dog.groups.first).to be_a Entitize.base_class::Group
   end
 end
 
@@ -72,16 +72,16 @@ end
 
 # If a class is found, the recursive call to #generate stops
 # --> we need to offer utility methods to make the continuation easier
-class Entitize::Group
+class Entitize.base_class::Group
   def initialize(data)
     @name = data[:name]
   end
 end
 
-class Entitize::Pig < Entitize::Entity
+class Entitize.base_class::Pig < Entitize::Entity
 end
 
-class Entitize::Joker < Entitize::Entity
+class Entitize.base_class::Joker < Entitize::Entity
 
   def funny?
     true

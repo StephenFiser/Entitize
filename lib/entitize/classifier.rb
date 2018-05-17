@@ -30,7 +30,7 @@ module Entitize
         if base_class.const_defined?(class_name)
 
           klass = base_class.const_get(class_name)
-          if klass.to_s.include?("Entitize::")
+          if klass.to_s.include?("#{Entitize.base_class.to_s}::")
             klass
           else
             base_class.const_set(class_name, build(data))
