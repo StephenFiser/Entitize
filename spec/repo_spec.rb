@@ -20,6 +20,13 @@ RSpec.describe Entitize::Repo do
     expect(crazy_chickens.first).to be_a Entitize.base_class::Chicklet
     expect(crazy_chickens.first.name).to eq('Regular Bob')
   end
+
+  it "handles no args provided" do
+    repo = Entitize::Repo.new('12345')
+    token_chickens = repo.find_with_token(Chicken, entity: "Chicken")
+    expect(token_chickens.first).to be_a Entitize.base_class::Chicken
+    expect(token_chickens.first.name).to eq('Token Bob')
+  end
 end
 
 class Chicken
@@ -33,6 +40,12 @@ class Chicken
   def self.find_the_sane_ones(ids, something_else)
     [
       { name: "Regular Bob" }
+    ]
+  end
+
+  def self.find_with_token(token)
+    [
+      { name: "Token Bob" }
     ]
   end
 end
