@@ -1,8 +1,8 @@
 module Entitize
-  class Entity
-    class << self
+  module Entitizable
+    module ClassMethods
 
-      def generate(data, class_name)
+      def generate(data, class_name = nil)
         Entitize::Classifier.generate(data, class_name)
       end
 
@@ -12,14 +12,16 @@ module Entitize
         instance
       end
 
-    end # --> END CLASS METHODS
-
-    def initialize(data)
-      Entitize::Classifier.define_methods(data, self)
     end
+
+    def self.included(klass)
+      klass.extend(ClassMethods)
+    end
+
 
     def auto_initialize(data)
       Entitize::Classifier.define_methods(data, self)
     end
+
   end
 end

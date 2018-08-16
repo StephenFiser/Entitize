@@ -1,3 +1,5 @@
+require 'pry'
+
 module Entitize
   class Classifier
     class << self
@@ -27,6 +29,7 @@ module Entitize
       end
 
       def get_class(class_name, data)
+
         if base_class.const_defined?(class_name)
 
           klass = base_class.const_get(class_name)
@@ -37,7 +40,7 @@ module Entitize
           end
         else
           base_class.const_set(class_name, build(data))
-        end.new(data)
+        end.auto_new(data)
       end
 
       def get_classes(class_name, data)
@@ -55,7 +58,7 @@ module Entitize
       end
 
       def build(data)
-        Class.new do
+        Class.new(Entitize::Entity) do
           def initialize(data)
             Entitize::Classifier.define_methods(data, self)
           end

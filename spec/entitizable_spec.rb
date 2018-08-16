@@ -1,4 +1,4 @@
-RSpec.describe Entitize::Entity do
+RSpec.describe Entitize::Entitizable do
   it "converts a hash into an object based on naming" do
     dog = { name: "Fred", breed: "Husky" }
     dog = entitize(dog, "Dog")
@@ -33,61 +33,62 @@ RSpec.describe Entitize::Entity do
 
   it "creates nested classes with singular names even when top class is defined" do
     dog = { name: "Fred", breed: "Husky", friends: [{ name: "DJ Kalid" }, { name: "Jimbob" }]}
-    dog = entitize(dog, "Pig")
+    dog = entitize(dog, "Squirrel")
     expect(dog.friends.first).to be_a Entitize.base_class::Friend
   end
 
   it "creates nested classes with singular names even when all classes is defined" do
-    dog = { name: "Fred", breed: "Husky", jokers: [{ name: "DJ Kalid" }, { name: "Jimbob" }]}
-    dog = entitize(dog, "Pig")
-    expect(dog.jokers.first).to be_a Entitize.base_class::Joker
-    expect(dog.jokers.first.funny?).to be true
+    dog = { name: "Fred", breed: "Husky", Bikers: [{ name: "DJ Kalid" }, { name: "Jimbob" }]}
+    dog = entitize(dog, "Squirrel")
+    expect(dog.Bikers.first).to be_a Entitize.base_class::Biker
+    expect(dog.Bikers.first.funny?).to be true
   end
 
   it "can handle collections at the top level" do
     data = [{ name: "DJ Kalid" }, { name: "Jimbob" }]
-    jokers = entitize(data, "Joker")
-    expect(jokers.first).to be_a Entitize.base_class::Joker
-    expect(jokers.first.funny?).to be true
-    expect(jokers.last).to be_a Entitize.base_class::Joker
-    expect(jokers.last.funny?).to be true
+    Bikers = entitize(data, "Biker")
+    expect(Bikers.first).to be_a Entitize.base_class::Biker
+    expect(Bikers.first.funny?).to be true
+    expect(Bikers.last).to be_a Entitize.base_class::Biker
+    expect(Bikers.last.funny?).to be true
   end
 
   it "can handle single objects that need to be created" do
     data = [{ name: "DJ Kalid" }, { name: "Jimbob", pup: { name: 'Freddy' }}]
-    jokers = entitize(data, "Joker")
-    expect(jokers.last.pup.name).to eq('Freddy')
+    Bikers = entitize(data, "Biker")
+    expect(Bikers.last.pup.name).to eq('Freddy')
   end
 
   it "will use defined classes if found" do
-    dog = { name: "Fred", breed: "Husky", groups: [{ name: "Yoga Klass" }]}
+    dog = { name: "Fred", breed: "Husky", yeps: [{ name: "Yoga Klass" }]}
     dog = entitize(dog, "Dog")
-    expect(dog.groups.first).to be_a Entitize.base_class::Group
+    expect(dog.yeps.first).to be_a Entitize.base_class::Yep
   end
 end
 
 def entitize(data, class_name)
-  Entitize::Entity.generate(data, class_name)
+  Entitize::Classifier.generate(data, class_name)
 end
 
 # If a class is found, the recursive call to #generate stops
 # --> we need to offer utility methods to make the continuation easier
-class Entitize.base_class::Group < Entitize::Entity
+class Entitize.base_class::Yep
+  include Entitize::Entitizable
+
   def initialize(data)
     @name = data[:name]
   end
 end
 
-class Entitize.base_class::Pig < Entitize::Entity
+class Entitize.base_class::Squirrel
+  include Entitize::Entitizable
 end
 
-class Entitize.base_class::Joker < Entitize::Entity
+class Entitize.base_class::Biker
+  include Entitize::Entitizable
 
   def funny?
     true
   end
 
 end
-
-# TODO:
-# 4. Bring in repo concept -> Note: Don't include ApiResponse concept! These can be custom now!
