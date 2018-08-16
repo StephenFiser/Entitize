@@ -8,14 +8,14 @@ require "entitize/classifier"
 require "entitize/entitizable"
 require "entitize/entity"
 
-module Bobs
+module Entities
 end
 
 module Entitize
 
   # TODO: Make this customizable
   def self.base_class
-    Bobs
+    Entities
   end
 
 end
