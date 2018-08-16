@@ -5,8 +5,8 @@ require 'active_support/inflector'
 require "entitize/version"
 require "entitize/repo"
 require "entitize/classifier"
-require "entitize/entity"
 require "entitize/entitizable"
+require "entitize/entity"
 
 module Bobs
 end
