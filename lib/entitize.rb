@@ -1,5 +1,3 @@
-# require 'pry'
-
 require 'active_support/inflector'
 
 require "entitize/version"

@@ -1,5 +1,3 @@
-require 'pry'
-
 module Entitize
   class Classifier
     class << self
