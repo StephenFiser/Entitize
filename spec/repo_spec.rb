@@ -21,11 +21,16 @@ RSpec.describe Entitize::Repo do
     expect(crazy_chickens.first.name).to eq('Regular Bob')
   end
 
-  it "handles no args provided" do
-    repo = Entitize::Repo.new('12345')
+  it "turns token arg into token method" do
+    repo = Entitize::Repo.new({ token: '12345' })
     token_chickens = repo.find_with_token(Chicken, entity: "Chicken")
     expect(token_chickens.first).to be_a Entitize.base_class::Chicken
     expect(token_chickens.first.name).to eq('Token Bob')
+  end
+
+  it "accepts a hash of args" do
+    repo = Entitize::Repo.new({ token: '12345' })
+    expect(repo.token).to eq('12345')
   end
 end
 
@@ -44,6 +49,7 @@ class Chicken
   end
 
   def self.find_with_token(token)
+    return false if token != '12345'
     [
       { name: "Token Bob" }
     ]

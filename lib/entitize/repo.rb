@@ -3,8 +3,8 @@ module Entitize
 
     attr_reader :token
 
-    def initialize(token = nil)
-      @token = token
+    def initialize(settings = {})
+      @token = settings[:token]
     end
 
     def method_missing(query, *args, &block)
