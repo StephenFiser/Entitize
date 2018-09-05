@@ -15,7 +15,8 @@ module Entitize
         classifier = self
         data.each do |key, value|
           target.define_singleton_method key do
-            if value.is_a? Array
+            # TODO: Test case where first value is a primitive vs. Hash
+            if value.is_a?(Array) && value.first.is_a?(Hash)
               classifier.create_set(key, value)
             elsif value.is_a? Hash
               classifier.create_one(key, value)
